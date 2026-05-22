@@ -699,6 +699,7 @@ select {
   border-radius: 50%;
   display: grid;
   place-items: center;
+  overflow: hidden;
   background:
     radial-gradient(circle at top, rgba(255,255,255,0.95), rgba(246,240,240,0.95)),
     linear-gradient(180deg, #ffffff 0%, #f7f1f1 100%);
@@ -713,6 +714,15 @@ select {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.portrait-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 50%;
 }
 
 .hero-card-content h2 {
@@ -895,7 +905,7 @@ select {
 }
 
 .glass-panel {
-  min-height: 440px;
+  min-height: 580px;
   padding: 28px;
   border-radius: 30px;
   position: relative;
@@ -915,6 +925,37 @@ select {
 
 .panel-content {
   max-width: 380px;
+  position: relative;
+  z-index: 3;
+}
+
+.panel-content .mini-label {
+  background: rgba(255, 255, 255, 0.92);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 6px 18px rgba(20, 8, 12, 0.18);
+}
+
+.panel-content h3 {
+  text-shadow: 0 2px 14px rgba(255, 255, 255, 0.55), 0 1px 2px rgba(255, 255, 255, 0.45);
+  font-weight: 700;
+}
+
+.panel-content p {
+  color: #fff;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+.panel-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  z-index: 1;
+  filter: brightness(0.72) saturate(1.05);
 }
 
 .panel-content h3 {
@@ -926,7 +967,9 @@ select {
 
 .panel-content p {
   margin: 0;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 500;
+  text-shadow: none;
 }
 
 .professional-card {
@@ -942,11 +985,21 @@ select {
   border-radius: 50%;
   display: grid;
   place-items: center;
+  overflow: hidden;
   background:
     radial-gradient(circle at top, rgba(255,255,255,0.95), rgba(247,241,241,0.95)),
     linear-gradient(180deg, #ffffff 0%, #f8f2f2 100%);
   border: 1px solid rgba(100, 13, 19, 0.08);
   box-shadow: 0 24px 60px rgba(100, 13, 19, 0.08);
+}
+
+.pro-avatar-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  border-radius: 50%;
 }
 
 .pro-avatar span {
@@ -1071,6 +1124,10 @@ select {
 
 .footer-brand {
   margin-bottom: 14px;
+}
+
+.footer-brand .brand-logo {
+  width: 110px;
 }
 
 .footer-col h4 {
@@ -1386,4 +1443,329 @@ summary:focus-visible {
     opacity 420ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   transition-delay: 90ms;
+}
+
+/* =========================
+   GOOGLE REVIEWS
+========================= */
+.reviews-section {
+  padding-top: 64px;
+  padding-bottom: 88px;
+}
+
+.reviews-card {
+  position: relative;
+  padding: 48px 36px 36px;
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(180deg, #ffffff 0%, #fbf5f5 100%);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-soft);
+  overflow: hidden;
+}
+
+.reviews-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at top, rgba(100, 13, 19, 0.05), transparent 60%);
+  pointer-events: none;
+}
+
+.reviews-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 14px;
+  margin-bottom: 32px;
+}
+
+.reviews-header h2 {
+  margin: 0;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.reviews-summary {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  color: var(--muted-strong);
+  font-size: 0.95rem;
+}
+
+.reviews-label {
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--text);
+}
+
+.reviews-stars {
+  display: inline-flex;
+  gap: 2px;
+  color: #f5b400;
+  font-size: 1.15rem;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.reviews-count strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.reviews-google-logo {
+  margin-top: 2px;
+}
+
+.reviews-google-logo svg {
+  width: 92px;
+  height: auto;
+  display: block;
+}
+
+.reviews-carousel {
+  position: relative;
+  margin-bottom: 28px;
+}
+
+.reviews-track {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 8px 4px 16px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.reviews-track::-webkit-scrollbar {
+  display: none;
+}
+
+.review-card {
+  flex: 0 0 calc((100% - 36px) / 3);
+  min-width: 0;
+  scroll-snap-align: start;
+  padding: 22px 22px 24px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid rgba(100, 13, 19, 0.10);
+  box-shadow: 0 8px 24px rgba(100, 13, 19, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    border-color var(--transition);
+}
+
+.review-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(100, 13, 19, 0.18);
+  box-shadow: 0 14px 32px rgba(100, 13, 19, 0.10);
+}
+
+.review-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.reviewer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.reviewer-name {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.98rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reviewer-verified {
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #4285F4;
+  color: #ffffff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.review-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.review-stars {
+  color: #f5b400;
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  line-height: 1;
+}
+
+.review-source {
+  display: inline-grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background:
+    conic-gradient(from 0deg, #4285F4 0 25%, #34A853 25% 50%, #FBBC05 50% 75%, #EA4335 75% 100%);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.7rem;
+  line-height: 1;
+  position: relative;
+}
+
+.review-source::after {
+  content: "G";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+}
+
+.review-card p {
+  margin: 0;
+  color: var(--muted-strong);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.reviews-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(100, 13, 19, 0.10);
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition),
+    opacity var(--transition);
+  z-index: 2;
+}
+
+.reviews-nav svg {
+  width: 18px;
+  height: 18px;
+}
+
+.reviews-nav:hover {
+  transform: translateY(-50%) scale(1.05);
+  background: var(--gradient-main);
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(100, 13, 19, 0.20);
+}
+
+.reviews-nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.reviews-nav-prev {
+  left: -10px;
+}
+
+.reviews-nav-next {
+  right: -10px;
+}
+
+.reviews-cta {
+  width: 100%;
+  min-height: 58px;
+  padding: 0 24px;
+  border-radius: 18px;
+  font-size: 1rem;
+  position: relative;
+}
+
+@media (max-width: 980px) {
+  .reviews-card {
+    padding: 36px 20px 28px;
+  }
+
+  .review-card {
+    flex: 0 0 calc((100% - 18px) / 2);
+  }
+
+  .reviews-nav-prev {
+    left: 4px;
+  }
+
+  .reviews-nav-next {
+    right: 4px;
+  }
+}
+
+@media (max-width: 640px) {
+  .reviews-section {
+    padding-top: 48px;
+    padding-bottom: 64px;
+  }
+
+  .reviews-card {
+    padding: 30px 16px 24px;
+  }
+
+  .reviews-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .reviews-summary {
+    gap: 10px;
+    font-size: 0.88rem;
+  }
+
+  .review-card {
+    flex: 0 0 88%;
+    padding: 20px;
+  }
+
+  .reviews-nav {
+    width: 38px;
+    height: 38px;
+  }
+
+  .reviews-nav-prev {
+    left: -6px;
+  }
+
+  .reviews-nav-next {
+    right: -6px;
+  }
 }

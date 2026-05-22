@@ -82,5 +82,133 @@ updateHeaderOnScroll();
 window.addEventListener("scroll", updateHeaderOnScroll, { passive: true });
 window.addEventListener("resize", updateHeaderOnScroll);
 
+// =========================
+// CARROSSEL DE AVALIAÇÕES (GOOGLE)
+// =========================
+(function initReviewsCarousel() {
+  const carousel = document.querySelector("[data-reviews-carousel]");
+  if (!carousel) return;
 
+  const track = carousel.querySelector(".reviews-track");
+  const prevBtn = carousel.querySelector("[data-reviews-prev]");
+  const nextBtn = carousel.querySelector("[data-reviews-next]");
+  if (!track) return;
 
+  const AUTOPLAY_INTERVAL = 4500;
+  let autoplayTimer = null;
+  let isPaused = false;
+
+  function getStep() {
+    const firstCard = track.querySelector(".review-card");
+    if (!firstCard) return track.clientWidth;
+    const styles = window.getComputedStyle(track);
+    const gap = parseFloat(styles.columnGap || styles.gap || "0") || 0;
+    return firstCard.getBoundingClientRect().width + gap;
+  }
+
+  function maxScroll() {
+    return track.scrollWidth - track.clientWidth;
+  }
+
+  function scrollByStep(direction) {
+    const step = getStep();
+    const target = track.scrollLeft + direction * step;
+    const limit = maxScroll();
+
+    if (direction > 0 && target >= limit - 1) {
+      track.scrollTo({ left: 0, behavior: "smooth" });
+    } else if (direction < 0 && target <= 0) {
+      track.scrollTo({ left: limit, behavior: "smooth" });
+    } else {
+      track.scrollTo({ left: target, behavior: "smooth" });
+    }
+  }
+
+  function startAutoplay() {
+    stopAutoplay();
+    autoplayTimer = setInterval(() => {
+      if (!isPaused) scrollByStep(1);
+    }, AUTOPLAY_INTERVAL);
+  }
+
+  function stopAutoplay() {
+    if (autoplayTimer) {
+      clearInterval(autoplayTimer);
+      autoplayTimer = null;
+    }
+  }
+
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      scrollByStep(-1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      scrollByStep(1);
+      stopAutoplay();
+      startAutoplay();
+    });
+  }
+
+  carousel.addEventListener("mouseenter", () => { isPaused = true; });
+  carousel.addEventListener("mouseleave", () => { isPaused = false; });
+  carousel.addEventListener("focusin", () => { isPaused = true; });
+  carousel.addEventListener("focusout", () => { isPaused = false; });
+
+  let isDown = false;
+  let startX = 0;
+  let startScroll = 0;
+  let moved = false;
+
+  track.addEventListener("pointerdown", (event) => {
+    isDown = true;
+    moved = false;
+    startX = event.clientX;
+    startScroll = track.scrollLeft;
+    track.setPointerCapture(event.pointerId);
+    track.style.scrollBehavior = "auto";
+    isPaused = true;
+  });
+
+  track.addEventListener("pointermove", (event) => {
+    if (!isDown) return;
+    const dx = event.clientX - startX;
+    if (Math.abs(dx) > 4) moved = true;
+    track.scrollLeft = startScroll - dx;
+  });
+
+  function endDrag(event) {
+    if (!isDown) return;
+    isDown = false;
+    track.style.scrollBehavior = "";
+    if (event && event.pointerId !== undefined) {
+      try { track.releasePointerCapture(event.pointerId); } catch (_) {}
+    }
+    setTimeout(() => { isPaused = false; }, 600);
+  }
+
+  track.addEventListener("pointerup", endDrag);
+  track.addEventListener("pointercancel", endDrag);
+  track.addEventListener("pointerleave", endDrag);
+
+  track.addEventListener("click", (event) => {
+    if (moved) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+  }, true);
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!prefersReducedMotion) {
+    startAutoplay();
+  }
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stopAutoplay();
+    else if (!prefersReducedMotion) startAutoplay();
+  });
+})();
