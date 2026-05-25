@@ -1,0 +1,9 @@
+.git
+.gitignore
+.github
+.vscode
+.DS_Store
+**/.DS_Store
+README.md
+*.log
+node_modules
